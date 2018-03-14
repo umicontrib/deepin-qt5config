@@ -1,0 +1,12 @@
+Source: deepin-qt5config
+Section: devel
+Priority: optional
+Maintainer: Deepin Packages Builder <packages@deepin.com>
+Build-Depends: debhelper (>=9), qt5-qmake
+Standards-Version: 3.9.8
+
+Package: deepin-qt5config
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Configure Qt feature on deepin platform
+	load(deepin_qt) in *.pro file.

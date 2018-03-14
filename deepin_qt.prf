@@ -1,0 +1,16 @@
+exists(/etc/deepin-version) {
+    DEEPIN_OS_TYPE = $$fromfile(/etc/deepin-version, Type)
+    DEEPIN_OS_VERSION = $$fromfile(/etc/deepin-version, Version)
+
+    isEmpty(DEEPIN_OS_TYPE): error(No value of the "Type" in the file "/etc/deepin-version")
+    isEmpty(DEEPIN_OS_VERSION): error(No value of the "Version" in the file "/etc/deepin-version")
+
+    message(Deepin OS Type: $$DEEPIN_OS_TYPE Version: $$DEEPIN_OS_VERSION)
+
+    QMAKE_PLATFORM += deepin deepin_$$lower($$DEEPIN_OS_TYPE)
+    CONFIG *= $$QMAKE_PLATFORM host_$$QMAKE_HOST.arch
+    DEFINES += Q_OS_DEEPIN Q_OS_DEEPIN_$$upper($$DEEPIN_OS_TYPE) Q_OS_DEEPIN_VERSION=\\\"$$DEEPIN_OS_VERSION\\\" Q_HOST_NAME=\\\"$$QMAKE_HOST.arch\\\" Q_HOST_$$upper($$QMAKE_HOST.arch)
+
+    export(DEEPIN_OS_TYPE)
+    export(DEEPIN_OS_VERSION)
+}
