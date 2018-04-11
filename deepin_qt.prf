@@ -1,15 +1,55 @@
+CONFIG += host_$$QMAKE_HOST.arch
+DEFINES += Q_HOST_NAME=\\\"$$QMAKE_HOST.arch\\\" Q_HOST_$$upper($$QMAKE_HOST.arch)
+
+defineReplace(formatString) {
+    string = $$1
+    string_count = $$size(string)
+
+    greaterThan(string_count, 1) {
+        for (item, string) {
+            isEmpty(new_string): new_string = $$item
+            else: new_string = $${new_string}_$${item}
+        }
+
+        return($$new_string)
+    }
+
+    return($$string)
+}
+
+exists(/etc/lsb-release) {
+    DISTRIB_ID = $$fromfile(/etc/lsb-release, DISTRIB_ID)
+    DISTRIB_RELEASE = $$fromfile(/etc/lsb-release, DISTRIB_RELEASE)
+
+    isEmpty(DISTRIB_ID): warning(No value of the "DISTRIB_ID" in the file "/etc/lsb-release")
+    isEmpty(DISTRIB_RELEASE): warning(No value of the "DISTRIB_RELEASE" in the file "/etc/lsb-release")
+
+    DISTRIB_ID = $$formatString($$DISTRIB_ID)
+
+    message("OS: $$DISTRIB_ID, Version: $$DISTRIB_RELEASE")
+
+    QMAKE_PLATFORM += $$lower($$DISTRIB_ID)
+    CONFIG *= $$QMAKE_PLATFORM
+    DEFINES *= Q_OS_$$upper($$DISTRIB_ID) Q_OS_VERSION=\\\"$$DISTRIB_RELEASE\\\"
+
+    export(DISTRIB_ID)
+    export(DISTRIB_RELEASE)
+}
+
 exists(/etc/deepin-version) {
     DEEPIN_OS_TYPE = $$fromfile(/etc/deepin-version, Type)
     DEEPIN_OS_VERSION = $$fromfile(/etc/deepin-version, Version)
 
-    isEmpty(DEEPIN_OS_TYPE): error(No value of the "Type" in the file "/etc/deepin-version")
-    isEmpty(DEEPIN_OS_VERSION): error(No value of the "Version" in the file "/etc/deepin-version")
+    isEmpty(DEEPIN_OS_TYPE): warning(No value of the "Type" in the file "/etc/deepin-version")
+    isEmpty(DEEPIN_OS_VERSION): warning(No value of the "Version" in the file "/etc/deepin-version")
 
-    message(Deepin OS Type: $$DEEPIN_OS_TYPE Version: $$DEEPIN_OS_VERSION)
+    DEEPIN_OS_TYPE = $$formatString($$DEEPIN_OS_TYPE)
+
+    message("Deepin OS Type: $$DEEPIN_OS_TYPE, Version: $$DEEPIN_OS_VERSION")
 
     QMAKE_PLATFORM += deepin deepin_$$lower($$DEEPIN_OS_TYPE)
-    CONFIG *= $$QMAKE_PLATFORM host_$$QMAKE_HOST.arch
-    DEFINES += Q_OS_DEEPIN Q_OS_DEEPIN_$$upper($$DEEPIN_OS_TYPE) Q_OS_DEEPIN_VERSION=\\\"$$DEEPIN_OS_VERSION\\\" Q_HOST_NAME=\\\"$$QMAKE_HOST.arch\\\" Q_HOST_$$upper($$QMAKE_HOST.arch)
+    CONFIG *= $$QMAKE_PLATFORM
+    DEFINES *= Q_OS_DEEPIN Q_OS_DEEPIN_$$upper($$DEEPIN_OS_TYPE) Q_OS_DEEPIN_VERSION=\\\"$$DEEPIN_OS_VERSION\\\"
 
     export(DEEPIN_OS_TYPE)
     export(DEEPIN_OS_VERSION)
