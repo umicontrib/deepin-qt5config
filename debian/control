@@ -7,6 +7,6 @@ Standards-Version: 3.9.8
 
 Package: deepin-qt5config
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, deepin-desktop-base
 Description: Configure Qt feature on deepin platform
 	load(deepin_qt) in *.pro file.
