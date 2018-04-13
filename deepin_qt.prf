@@ -20,17 +20,25 @@ defineReplace(formatString) {
 exists(/etc/lsb-release) {
     DISTRIB_ID = $$fromfile(/etc/lsb-release, DISTRIB_ID)
     DISTRIB_RELEASE = $$fromfile(/etc/lsb-release, DISTRIB_RELEASE)
+    DISTRIB_CODENAME = $$fromfile(/etc/lsb-release, DISTRIB_CODENAME)
 
     isEmpty(DISTRIB_ID): warning(No value of the "DISTRIB_ID" in the file "/etc/lsb-release")
     isEmpty(DISTRIB_RELEASE): warning(No value of the "DISTRIB_RELEASE" in the file "/etc/lsb-release")
+    else: DEFINES *= Q_OS_VERSION=\\\"$$DISTRIB_RELEASE\\\"
+    isEmpty(DISTRIB_CODENAME): warning(No value of the "DISTRIB_CODENAME" in the file "/etc/lsb-release")
 
     DISTRIB_ID = $$formatString($$DISTRIB_ID)
 
     message("OS: $$DISTRIB_ID, Version: $$DISTRIB_RELEASE")
 
     QMAKE_PLATFORM += $$lower($$DISTRIB_ID)
+
+    !isEmpty(DISTRIB_ID) {
+        !isEmpty(DISTRIB_CODENAME): QMAKE_PLATFORM += $$lower($$DISTRIB_ID)_$$lower($$DISTRIB_CODENAME)
+        DEFINES *= Q_OS_$$upper($$DISTRIB_ID)
+    }
+
     CONFIG *= $$QMAKE_PLATFORM
-    DEFINES *= Q_OS_$$upper($$DISTRIB_ID) Q_OS_VERSION=\\\"$$DISTRIB_RELEASE\\\"
 
     export(DISTRIB_ID)
     export(DISTRIB_RELEASE)
@@ -42,14 +50,21 @@ exists(/etc/deepin-version) {
 
     isEmpty(DEEPIN_OS_TYPE): warning(No value of the "Type" in the file "/etc/deepin-version")
     isEmpty(DEEPIN_OS_VERSION): warning(No value of the "Version" in the file "/etc/deepin-version")
+    else: DEFINES *= Q_OS_DEEPIN_VERSION=\\\"$$DEEPIN_OS_VERSION\\\"
 
     DEEPIN_OS_TYPE = $$formatString($$DEEPIN_OS_TYPE)
 
     message("Deepin OS Type: $$DEEPIN_OS_TYPE, Version: $$DEEPIN_OS_VERSION")
 
-    QMAKE_PLATFORM += deepin deepin_$$lower($$DEEPIN_OS_TYPE)
+    QMAKE_PLATFORM += deepin
+
+    !isEmpty(DEEPIN_OS_TYPE) {
+        QMAKE_PLATFORM += deepin_$$lower($$DEEPIN_OS_TYPE)
+        DEFINES *= Q_OS_DEEPIN_$$upper($$DEEPIN_OS_TYPE)
+    }
+
     CONFIG *= $$QMAKE_PLATFORM
-    DEFINES *= Q_OS_DEEPIN Q_OS_DEEPIN_$$upper($$DEEPIN_OS_TYPE) Q_OS_DEEPIN_VERSION=\\\"$$DEEPIN_OS_VERSION\\\"
+    DEFINES *= Q_OS_DEEPIN
 
     export(DEEPIN_OS_TYPE)
     export(DEEPIN_OS_VERSION)
