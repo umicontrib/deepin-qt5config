@@ -3,6 +3,7 @@ DEFINES += Q_HOST_NAME=\\\"$$QMAKE_HOST.arch\\\" Q_HOST_$$upper($$QMAKE_HOST.arc
 
 defineReplace(formatString) {
     string = $$1
+    string = $$replace(string, \\s+, _)
     string_count = $$size(string)
 
     greaterThan(string_count, 1) {
@@ -21,6 +22,8 @@ exists(/etc/lsb-release) {
     DISTRIB_ID = $$fromfile(/etc/lsb-release, DISTRIB_ID)
     DISTRIB_RELEASE = $$fromfile(/etc/lsb-release, DISTRIB_RELEASE)
     DISTRIB_CODENAME = $$fromfile(/etc/lsb-release, DISTRIB_CODENAME)
+
+    DISTRIB_RELEASE = $$formatString($$DISTRIB_RELEASE)
 
     isEmpty(DISTRIB_ID): warning(No value of the "DISTRIB_ID" in the file "/etc/lsb-release")
     isEmpty(DISTRIB_RELEASE): warning(No value of the "DISTRIB_RELEASE" in the file "/etc/lsb-release")
@@ -47,6 +50,8 @@ exists(/etc/lsb-release) {
 exists(/etc/deepin-version) {
     DEEPIN_OS_TYPE = $$fromfile(/etc/deepin-version, Type)
     DEEPIN_OS_VERSION = $$fromfile(/etc/deepin-version, Version)
+
+    DEEPIN_OS_VERSION = $$formatString($$DEEPIN_OS_VERSION)
 
     isEmpty(DEEPIN_OS_TYPE): warning(No value of the "Type" in the file "/etc/deepin-version")
     isEmpty(DEEPIN_OS_VERSION): warning(No value of the "Version" in the file "/etc/deepin-version")
