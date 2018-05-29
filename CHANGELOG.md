@@ -1,3 +1,13 @@
+<a name="1.0.3"></a>
+## 1.0.3 (2018-05-29)
+
+
+#### Bug Fixes
+
+*   format string form "DISTRIB_RELEASE" and "DEEPIN_OS_VERSION" ([a79d9efb](https://github.com/linuxdeepin/deepin-qt5config/commit/a79d9efb7376985bfaa424d38960538cc2154189))
+
+
+
 <a name="1.0.2"></a>
 ## 1.0.2 (2018-05-04)
 
