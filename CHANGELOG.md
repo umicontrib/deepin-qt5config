@@ -1,3 +1,9 @@
+### Bug Fixes
+## 1.0.4 (2018-09-19)
+
+* remove build depend deepin-desktop-base
+
+
 <a name="1.0.3"></a>
 ## 1.0.3 (2018-05-29)
 
