@@ -1,4 +1,10 @@
-deepin-qt5config (1.0.0) unstable; urgency=medium
+deepin-qt5config (1.0.4) unstable; urgency=medium
+
+  * Remove build depend deepin-desktop-base
+
+ -- Deepin Packages Builder <packages@deepin.com>  Wed, 19 Sep 2018 15:10:02 +0800
+
+ deepin-qt5config (1.0.0) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
